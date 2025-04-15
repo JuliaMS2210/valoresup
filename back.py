@@ -11,7 +11,7 @@ class CalculadoraPrecos:
 
     def calcular_precos(self, valor_produto, frete, porcentagem_imposto, origem):
         # Calcula o imposto como porcentagem do valor do produto
-        imposto = valor_produto * (porcentagem_imposto / 100)
+        imposto = resultimposto = valor_produto * (porcentagem_imposto / 100)
         valor_total = valor_produto + imposto + frete  # Soma do produto, imposto e frete
 
         # Cálculos de margem CORRIGIDOS
