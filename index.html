@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de Precificação</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url(../calculadora_de_precificacao/CATALOGO\ UP\ EPI\ -\ HOEGH\ .png);
+      background-repeat:no-repeat ;
+      background-size: cover;
+      border-radius: 20px;
+      background-position: center center;
+      background-color: #fe4816;
+      margin: 0;
+      padding: 150px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 50px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #fe4816;
+      font-size: 35px
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      font-size: 14px;
+      color: #000627;
+      display: block;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .form-group button {
+      width: 100%;
+      padding: 10px;
+      background-color: #fe4816;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      color: white;
+      cursor: pointer;
+    }
+    .form-group button:hover {
+      background-color: #fe4816;
+    }
+    .results {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .results h3 {
+      text-align: center;
+      color: #333;
+    }
+    .results p {
+      font-size: 18px;
+      color: #000000;
+      margin-bottom: 10px;
+    }
+    .results button {
+      width: 100%;
+      padding: 10px;
+      background-color: #114b78;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      color: white;
+      cursor: pointer;
+    }
+    .results button:hover {
+      background-color: #114b78;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #114b78;
+      color: white;
+    }
+    .back-button {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #fe4816;
+      color: white;
+      border: none;
+      width: 100%;
+      font-size: 16px;
+    }
+    .back-button:hover {
+      background-color: #fe4816;
+    }
+  </style>
+</head>
+<body>
+  <div style="display: flex; justify-content: center; align-items: center; height: 20vh;">
+    <img src="../calculadora_de_precificacao/logo cabana (1).png" width="160">
+  </div>
+
+  <div class="container">
+    <h2>Calculadora de Precificação</h2>
+    <div id="produtoForm">
+      <div class="form-group">
+        <label for="nomeProduto">Nome do Produto:</label>
+        <input type="text" id="nomeProduto" placeholder="Digite o nome do produto" required>
+      </div>
+      <div class="form-group">
+        <label for="valorProduto">Valor do Produto (R$):</label>
+        <input type="number" id="valorProduto" placeholder="Digite o valor do produto" step="0.01" required>
+      </div>
+      <div class="form-group">
+        <label for="temFrete">Existe frete? (R$):</label>
+        <input type="number" id="frete" placeholder="Digite o valor do frete (se houver)" step="0.01" value="0">
+      </div>
+      <div class="form-group">
+        <label for="imposto">Qual a porcentagem do imposto? (%):</label>
+        <input type="number" id="imposto" placeholder="Digite a porcentagem do imposto" step="0.01" value="0">
+      </div>
+
+      <button class="form-group" onclick="calcularPreco()">Calcular Preço</button>
+    </div>
+
+    <div id="result" class="results" style="display: none;">
+      <h3>Resultado</h3>
+      <p><strong>Produto:</strong> <span id="resultNomeProduto"></span></p>
+      <p><strong>Valor Inicial:</strong> R$ <span id="resultValorInicial"></span></p>
+      <p><strong>Frete:</strong> R$ <span id="resultFrete"></span></p>
+      <p><strong>Imposto:</strong> R$ <span id="resultImposto"></span></p>
+      <p><strong>Valor Total (Produto + Frete + Imposto):</strong> R$ <span id="resultValorTotal"></span></p>
+      <p><strong>Valor do Produto Dividido por 88%:</strong> R$ <span id="resultComMargem"></span></p>
+      <p><strong>Valor do Produto Dividido por 84%:</strong> R$ <span id="resultValor84"></span></p>
+
+      <div class="form-group">
+        <label for="valorEscolhido">Escolha o valor para a planilha:</label>
+        <select id="valorEscolhido">
+          <option value="comMargem">Valor com Margem 12% (÷88%)</option>
+          <option value="valor84">Valor com Margem 16% (÷84%)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="prazoEntrega">Prazo de entrega:</label>
+        <input type="text" id="prazoEntrega" placeholder="Digite o prazo de entrega (dias)">
+      </div>
+
+      <div class="form-group">
+        <label for="observacao">Observação:</label>
+        <input type="text" id="observacao" placeholder="Digite uma observação">
+      </div>
+
+      <button onclick="adicionarProduto()">Adicionar Produto à Planilha</button>
+      <button class="back-button" onclick="voltarParaCalculo()">Voltar para Cálculo</button>
+    </div>
+
+    <div id="listaProdutos" style="display: none;">
+      <h3>Lista de Produtos</h3>
+      <table id="tabelaProdutos">
+        <thead>
+          <tr>
+            <th>Nome do Produto</th>
+            <th>Valor por Unidade</th>
+            <th>Prazo de Entrega</th>
+            <th>Observação</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <button class="back-button" onclick="voltarMenu()">Voltar ao Menu Inicial</button>
+    </div>
+  </div>
+
+  <script>
+    let produtos = [];
+
+    function calcularPreco() {
+      // Validação dos campos obrigatórios
+      const nomeProduto = document.getElementById('nomeProduto').value;
+      const valorProdutoInput = document.getElementById('valorProduto').value;
+      
+      if (!nomeProduto || !valorProdutoInput) {
+        alert("Por favor, preencha pelo menos o nome e valor do produto!");
+        return;
+      }
+
+      const valorProduto = parseFloat(valorProdutoInput);
+      const frete = parseFloat(document.getElementById('frete').value) || 0;
+      const porcentagemImposto = parseFloat(document.getElementById('imposto').value) || 0;
+      
+      // Cálculos corretos
+      const imposto = valorProduto * (porcentagemImposto / 100);
+      const valorTotal = valorProduto + frete + imposto;
+      const valorComMargem = valorTotal / 0.88;  // Divisão por 88% (equivalente a 12% de margem)
+      const valor84 = valorTotal / 0.84;  // Divisão por 84% (equivalente a 16% de margem)
+
+      // Exibição dos resultados
+      document.getElementById('resultNomeProduto').textContent = nomeProduto;
+      document.getElementById('resultValorInicial').textContent = valorProduto.toFixed(2);
+      document.getElementById('resultFrete').textContent = frete.toFixed(2);
+      document.getElementById('resultImposto').textContent = imposto.toFixed(2);
+      document.getElementById('resultValorTotal').textContent = valorTotal.toFixed(2);
+      document.getElementById('resultComMargem').textContent = valorComMargem.toFixed(2);
+      document.getElementById('resultValor84').textContent = valor84.toFixed(2);
+
+      // Armazena os valores para uso posterior
+      window.valorComMargem = valorComMargem;
+      window.valor84 = valor84;
+      window.nomeProduto = nomeProduto;
+      window.valorTotal = valorTotal;
+
+      // Mostra os resultados
+      document.getElementById('produtoForm').style.display = 'none';
+      document.getElementById('result').style.display = 'block';
+    }
+
+    function adicionarProduto() {
+      const valorEscolhido = document.getElementById('valorEscolhido').value;
+      const prazoEntrega = document.getElementById('prazoEntrega').value;
+      const observacao = document.getElementById('observacao').value;
+      
+      const valorFinal = valorEscolhido === 'comMargem' ? window.valorComMargem : window.valor84;
+
+      // Adiciona o produto no início do array
+      produtos.unshift({
+        nome: window.nomeProduto,
+        valor: valorFinal,
+        prazo: prazoEntrega,
+        obs: observacao
+      });
+
+      mostrarProdutos();
+    }
+
+    function mostrarProdutos() {
+      const tabela = document.getElementById('tabelaProdutos').getElementsByTagName('tbody')[0];
+      tabela.innerHTML = '';
+      
+      produtos.forEach(produto => {
+        const row = tabela.insertRow();
+        row.insertCell(0).textContent = produto.nome;
+        row.insertCell(1).textContent = 'R$ ' + produto.valor.toFixed(2);
+        row.insertCell(2).textContent = produto.prazo;
+        row.insertCell(3).textContent = produto.obs;
+      });
+
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('listaProdutos').style.display = 'block';
+    }
+
+    function voltarParaCalculo() {
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('produtoForm').style.display = 'block';
+      // Limpa apenas os campos de resultado, mantendo os valores inseridos
+      document.getElementById('prazoEntrega').value = '';
+      document.getElementById('observacao').value = '';
+    }
+
+    function voltarMenu() {
+      document.getElementById('listaProdutos').style.display = 'none';
+      document.getElementById('produtoForm').style.display = 'block';
+      // Limpa todos os campos para um novo cálculo
+      document.getElementById('nomeProduto').value = '';
+      document.getElementById('valorProduto').value = '';
+      document.getElementById('frete').value = '0';
+      document.getElementById('imposto').value = '0';
+      document.getElementById('prazoEntrega').value = '';
+      document.getElementById('observacao').value = '';
+    }
+  </script>
+</body>
+</html>
